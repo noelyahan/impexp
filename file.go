@@ -1,4 +1,4 @@
-package eximp
+package impexp
 
 import (
 	"errors"
@@ -26,9 +26,10 @@ func NewFileExporter(img image.Image, path string) Exporter {
 }
 
 func (o file) Import() (image.Image, error) {
-	errMsg := "eximp cannot read or decode !"
+	errMsg := "impexp cannot read or decode !"
 	ext := getExt(o.path)
 	f, err := os.Open(o.path)
+	defer f.Close()
 	if err != nil {
 		return nil, errors.New(errMsg)
 	}
@@ -51,13 +52,14 @@ func (o file) Import() (image.Image, error) {
 func (o file) Export() error {
 	img := o.img
 	if img == nil {
-		return errors.New("eximp found a invalid file ")
+		return errors.New("impexp found a invalid file ")
 	}
 
 	ext := getExt(o.path)
 	f, err := os.Create(o.path)
+	defer f.Close()
 	if err != nil {
-		msg := fmt.Sprintf("Sorry eximp failed to create: %s", o.path)
+		msg := fmt.Sprintf("Sorry impexp failed to create: %s", o.path)
 		log.Printf(msg)
 		return errors.New(msg)
 	}
@@ -67,9 +69,8 @@ func (o file) Export() error {
 		err = png.Encode(f, img)
 	}
 	if err != nil {
-		msg := fmt.Sprintf("Sorry eximp cannot encode the image: %s", o.path)
+		msg := fmt.Sprintf("Sorry impexp cannot encode the image: %s", o.path)
 		return errors.New(msg)
 	}
-	defer f.Close()
 	return nil
 }

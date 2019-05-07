@@ -1,4 +1,4 @@
-package eximp
+package impexp
 
 import (
 	"errors"
@@ -23,14 +23,14 @@ func (o animation) Export() error {
 	ext := getExt(o.path)
 	f, err := os.Create(o.path)
 	if err != nil {
-		msg := fmt.Sprintf("Sorry eximp failed to create: %s", o.path)
+		msg := fmt.Sprintf("Sorry impexp failed to create: %s", o.path)
 		return errors.New(msg)
 	}
 	if ext == "gif" {
 		err = gif.EncodeAll(f, &anim)
 	}
 	if err != nil {
-		msg := fmt.Sprintf("Sorry eximp cannot encode the image: %s", o.path)
+		msg := fmt.Sprintf("Sorry impexp cannot encode the image: %s", o.path)
 		return errors.New(msg)
 	}
 	defer f.Close()

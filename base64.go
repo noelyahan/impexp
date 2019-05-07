@@ -1,4 +1,4 @@
-package eximp
+package impexp
 
 import (
 	"image"
@@ -17,10 +17,10 @@ type b64Importer struct {
 	data string
 }
 
-type b64Exporter struct {
-	ext string
-	img image.Image
-	cb func(data string)
+type B64Exporter struct {
+	Ext string
+	Img image.Image
+	CB  func(data string)
 }
 
 type b64AnimExporter struct {
@@ -34,7 +34,7 @@ func NewBase64Importer(data string) Importer {
 }
 
 func NewBase64Exporter(ext string, img image.Image, cb func(data string)) Exporter {
-	return b64Exporter{ext, img, cb}
+	return B64Exporter{ext, img, cb}
 }
 
 func NewBase64AnimationExporter(ext string, anim gif.GIF, cb func(data string)) Exporter {
@@ -62,29 +62,28 @@ func (o b64AnimExporter) Export() (err error) {
 	return
 }
 
-
-func (o b64Exporter) Export() (err error) {
-	img := o.img
+func (o B64Exporter) Export() (err error) {
+	img := o.Img
 	if img == nil {
 		return errors.New("Mergi found a invalid file ")
 	}
 	b := make([]byte, 0)
 	buf := bytes.NewBuffer(b)
-	if o.ext == "jpg" || o.ext == "jpeg" {
+	if o.Ext == "jpg" || o.Ext == "jpeg" {
 		err = jpeg.Encode(buf, img, &jpeg.Options{Quality: jpeg.DefaultQuality})
-	} else if o.ext == "png" {
+	} else if o.Ext == "png" {
 		err = png.Encode(buf, img)
-	} else if o.ext == "gif" {
-		err = gif.Encode(buf, o.img, nil)
+	} else if o.Ext == "gif" {
+		err = gif.Encode(buf, o.Img, nil)
 	}
 	if err != nil {
 		return errors.New("Sorry Mergi cannot encode the image")
 	}
 
 	str := base64.StdEncoding.EncodeToString(buf.Bytes())
-	if o.cb != nil {
-		s := fmt.Sprintf("data:image/%s;base64,", o.ext)
-		o.cb(s + str)
+	if o.CB != nil {
+		s := fmt.Sprintf("data:image/%s;base64,", o.Ext)
+		o.CB(s + str)
 	}
 	return
 }

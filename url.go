@@ -1,4 +1,4 @@
-package eximp
+package impexp
 
 import (
 	"errors"
@@ -21,9 +21,9 @@ func NewURLImporter(url string) Importer {
 }
 
 func (o httpURL) Import() (image.Image, error) {
-	errMsg := fmt.Sprintf("eximp can't find the file or file is invalid %s", o.url)
+	errMsg := fmt.Sprintf("impexp can't find the file or file is invalid %s", o.url)
 	if !isValidURL(o.url) {
-		return nil, fmt.Errorf("eximp found a invalid URL: %s", o.url)
+		return nil, fmt.Errorf("impexp found a invalid URL: %s", o.url)
 	}
 	resp, err := http.Get(o.url)
 	if err != nil {

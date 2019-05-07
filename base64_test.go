@@ -1,4 +1,4 @@
-package eximp
+package impexp
 
 import (
 	"testing"
