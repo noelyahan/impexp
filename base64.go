@@ -48,8 +48,8 @@ func (o b64AnimExporter) Export() (err error) {
 
 	b := make([]byte, 0)
 	buf := bytes.NewBuffer(b)
+	defer buf.Reset()
 	err = gif.EncodeAll(buf, &o.anim)
-
 	if err != nil {
 		return errors.New("Sorry Mergi cannot encode the animation")
 	}
@@ -69,6 +69,7 @@ func (o B64Exporter) Export() (err error) {
 	}
 	b := make([]byte, 0)
 	buf := bytes.NewBuffer(b)
+	defer buf.Reset()
 	if o.Ext == "jpg" || o.Ext == "jpeg" {
 		err = jpeg.Encode(buf, img, &jpeg.Options{Quality: jpeg.DefaultQuality})
 	} else if o.Ext == "png" {
