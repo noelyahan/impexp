@@ -91,9 +91,9 @@ func (o B64Exporter) Export() (err error) {
 
 func (o b64Importer) Import() (image.Image, error) {
 	ext := ""
-	if strings.Contains(o.data, "png") {
+	if strings.Contains(o.data, "data:image/png") {
 		ext = "png"
-	}else if strings.Contains(o.data, "jpeg") || strings.Contains(o.data, "jpg") {
+	}else if strings.Contains(o.data, "data:image/jpeg") || strings.Contains(o.data, "data:image/jpg") {
 		ext = "jpg"
 	}
 	imgStr := strings.Join(strings.Split(o.data, ",")[1:], "")
